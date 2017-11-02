@@ -1,0 +1,112 @@
+<%- include header %>
+
+<div class="col-xs-4">
+
+ <div id="mainmap" style=" width: 600px;height: 400px;"></div>
+<script type="text/javascript">
+var myChart = echarts.init(document.getElementById('mainmap'));
+ // 过渡---------------------
+ function randomData() {    
+                now = new Date(+now + oneDay);    
+                value = value + Math.random() * 21 - 10;    
+                return {    
+                    name: now.toString(),    
+                      
+                    value: [    
+                        [now.getFullYear(), now.getMonth() + 1, now.getDate()].join('/'),    
+                        Math.round(value)    
+                    ]    
+                       
+                }    
+            }    
+                
+            var data = [];    
+            var now = +new Date(2013, 9, 3);    
+            var oneDay = 24 * 3600 * 1000;    
+            var value = Math.random() * 1000;    
+            for (var i = 0; i < 1000; i++) {    
+                data.push(randomData());    
+            }    
+                
+            option = {    
+                title: {    
+                    text: '动态数据 + 时间坐标轴'    
+                },    
+                tooltip: {    
+                    trigger: 'axis',    
+                    formatter: function (params) {    
+                        params = params[0];    
+                        var date = new Date(params.name);    
+                        return date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear() + ' : ' + params.value[1];    
+                    },    
+                    axisPointer: {    
+                        animation: false    
+                    }    
+                },    
+                xAxis: {    
+                    type: 'time',    
+                    splitLine: {    
+                        show: false    
+                    }   
+                },    
+                yAxis: {    
+                    type: 'value',    
+                    boundaryGap: [0, '100%'],    
+                    splitLine: {    
+                        show: false    
+                    }    
+                },    
+                series: [{    
+                    name: '模拟数据',    
+                    type: 'line',    
+                    showSymbol: false,    
+                    hoverAnimation: false,    
+                    data: data    
+                }]    
+            };    
+                
+           setInterval(function () {    
+                
+                for (var i = 0; i < 5; i++) {    
+                    data.shift();    
+                    data.push(randomData());    
+                }    
+               myChart.setOption(option);  
+            }, 1000);    
+    
+//myChart.setOption(option);                 
+</script>
+</div>
+<!--
+<% posts.forEach(function(post, index) { %>
+<div class="section">
+    <h2><a href="/u/<%= post.name %>/<%= post.time.day %>/<%= post.title %>"><%= post.title %></a></h2>
+    <p><a href="/u/<%= post.name %>"><img src="<%= post.head %>" class="r_head"/></a></p>
+    <p class="info">
+        作者：<a href="/u/<%= post.name %>"><%= post.name %></a> |
+        日期：<%= post.time.minute %>
+        标签：
+        <% post.tags.forEach(function (tag, index) { %>
+        <% if (tag) { %>
+        <a class="tag" href="/tags/<%= tag %>"><%= tag %></a>
+        <% } %>
+        <% }) %>
+        <% if (post.reprint_info.reprint_from) { %>
+        <br><a href="/u/<%= post.reprint_info.reprint_from.name %>/<%= post.reprint_info.reprint_from.day %>/<%= post.reprint_info.reprint_from.title %>">原文链接</a>
+        <% } %>
+    </p>
+    <div class="article-detail"><%- post.post %></div>
+    <p class="info">
+        阅读：<%= post.pv %> |
+        转载：
+        <% if (post.reprint_info.reprint_to) { %>
+            <%= post.reprint_info.reprint_to.length %>
+        <% } else { %>
+            <%= 0 %>
+        <% } %>
+    </p>
+</div>
+<% }) %>
+<%- include paging %>
+-->
+<%- include footer %>

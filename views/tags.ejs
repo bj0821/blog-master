@@ -1,0 +1,108 @@
+<%- include header %>
+
+
+<div id="map_canvas"></div> 
+<div class="buttonmap" id="result">
+    <button id="run">开始</button> 
+    <button id="stop">停止</button> 
+    <button id="pause">暂停</button> 
+    <button id="hide">隐藏信息窗口</button> 
+    <button id="show">展示信息窗口</button> 
+</div>
+<script> 
+var map = new BMap.Map('map_canvas');
+map.enableScrollWheelZoom();
+map.centerAndZoom(new BMap.Point(102.732854, 25.053502), 13);
+var lushu;
+// 实例化一个驾车导航用来生成路线
+var drv = new BMap.DrivingRoute('昆明', {
+    onSearchComplete: function(res) {
+        if (drv.getStatus() == BMAP_STATUS_SUCCESS) {
+            var plan = res.getPlan(0);
+            var arrPois =[];
+            for(var j=0;j<plan.getNumRoutes();j++){
+                var route = plan.getRoute(j);
+                arrPois= arrPois.concat(route.getPath());
+            }
+            map.addOverlay(new BMap.Polyline(arrPois, {strokeColor: '#111'}));
+            map.setViewport(arrPois);
+            
+            lushu = new BMapLib.LuShu(map,arrPois,{
+            defaultContent:"",//"从天安门到百度大厦"
+            autoView:true,//是否开启自动视野调整，如果开启那么路书在运动过程中会根据视野自动调整
+            icon  : new BMap.Icon('http://lbsyun.baidu.com/jsdemo/img/car.png', new BMap.Size(52,26),{anchor : new BMap.Size(27, 13)}),
+            speed: 200,
+            enableRotation:true,//是否设置marker随着道路的走向进行旋转
+            landmarkPois: [
+               {lng:102.726135,lat:25.054222,html:'驰宇大厦',pauseTime:2},
+               {lng:102.725919,lat:25.055826,html:'穿心鼓楼地铁站<div><img src="http://map.baidu.com/img/logo-map.gif"/></div>',pauseTime:3},
+               {lng:102.733824,lat:25.056906,html:'席子营小游园<div><img src="http://ishouji.baidu.com/resource/images/map/show_pic04.gif"/></div>',pauseTime:2}
+            ]});          
+        }
+    }
+});
+drv.search('交三桥地铁站', '七彩俊园');
+//绑定事件
+$("run").onclick = function(){
+    lushu.start();
+}
+$("stop").onclick = function(){
+    lushu.stop();
+}
+$("pause").onclick = function(){
+    lushu.pause();
+}
+$("hide").onclick = function(){
+    lushu.hideInfoWindow();
+}
+$("show").onclick = function(){
+    lushu.showInfoWindow();
+}
+function $(element){
+    return document.getElementById(element);
+}
+
+// 百度地图API功能
+var sContent =
+	"<h4 style='margin:0 0 5px 0;padding:0.2em 0'>七彩俊园</h4>" + 
+	"<img style='float:right;margin:4px' id='imgDemo' src='/images/jiaosanqiao.jpg' width='139' height='104' title='天安门'/>" + 
+	"<p style='margin:0;line-height:1.5;font-size:13px'>设备序列号：89860116886010600124，经度：102.734704, 纬度：25.053535，时间：2017-09-26 10:39:28</p>" + 
+    "</div>";
+    var point = new BMap.Point(102.734704,25.053535);
+	var marker = new BMap.Marker(point);
+	var infoWindow = new BMap.InfoWindow(sContent);  // 创建信息窗口对象
+	map.centerAndZoom(point, 15);
+	map.addOverlay(marker);
+	marker.addEventListener("click", function(){          
+	   this.openInfoWindow(infoWindow);
+	   //图片加载完毕重绘infowindow
+	   document.getElementById('imgDemo').onload = function (){
+		   infoWindow.redraw();   //防止在网速较慢，图片未加载时，生成的信息框高度比图片的总高度小，导致图片部分被隐藏
+	   }
+    });
+    
+    var sContent1 =
+	"<h4 style='margin:0 0 5px 0;padding:0.2em 0'>交三桥</h4>" + 
+	"<img style='float:right;margin:4px' id='imgDemo' src='/images/qicaijunyuan.jpg' width='139' height='104' title='天安门'/>" + 
+	"<p style='margin:0;line-height:1.5;font-size:13px'>设备序列号：89860116886010600124，经度：102.725955, 纬度：25.049116，时间：2017-09-26 10:27:49</p>" + 
+    "</div>";
+    var point2 = new BMap.Point(102.725955,25.049116);
+	var marker2 = new BMap.Marker(point2);
+	var infoWindow2 = new BMap.InfoWindow(sContent1);  // 创建信息窗口对象
+	map.centerAndZoom(point, 15);
+	map.addOverlay(marker2);
+	marker2.addEventListener("click", function(){          
+	   this.openInfoWindow(infoWindow2);
+	   //图片加载完毕重绘infowindow
+	   document.getElementById('imgDemo').onload = function (){
+		   infoWindow2.redraw();   //防止在网速较慢，图片未加载时，生成的信息框高度比图片的总高度小，导致图片部分被隐藏
+	   }
+	});
+</script> 
+<br/><br/>
+<!--
+<% posts.forEach(function (tag, index) { %>
+<a class="tag" href="/tags/<%= tag %>"><%= tag %></a>
+<% }) %>
+-->
+<%- include footer %>

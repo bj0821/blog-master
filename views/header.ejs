@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+    <html lang="zh-cn">
+    <head>
+        <meta charset="UTF-8">
+        <title>车联网数据融合实现平台</title>
+        <link rel="stylesheet" type="text/css" href="/stylesheets/style.css">
+        <script charset="utf-8" src="/KindEditor/kindeditor-min.js"></script>
+        <script charset="utf-8" src="/KindEditor/lang/zh_CN.js"></script>
+        <script type="text/javascript" src="/KindEditor/echarts.js"></script>
+        <script type="text/javascript" src="/KindEditor/echarts.min.js"></script>
+        <script type="text/javascript" src="/KindEditor/bmap.js"></script>
+        <script src="http://api.map.baidu.com/api?v=2.0&ak=lZlEv5hy9SmRYstvYGBEM7chCv0uk586"></script>
+        <script type="text/javascript" src="http://api.map.baidu.com/library/LuShu/1.2/src/LuShu_min.js"></script>
+        <script>
+            var editor;
+            KindEditor.ready(function(K) {
+                editor = K.create('#kindeditor');
+            });
+        </script>
+    </head>
+    <body class="clear">
+    <div class="wrap">
+    <header>
+        <h1><%= title %></h1>
+    </header>
+    <nav>
+        <span><a title="主页" href="/">主页</a></span>
+        <span><a title="存档" href="/archive">历史数据</a> </span>
+        <span><a title="标签" href="/tags">路径回溯</a></span>
+        <span><a title="GPS数据" href="/gpsdata">GPS数据</a></span>
+        <span><a title="关于我们" href="/links">关于我们</a></span>
+        
+        <% if (user) { %>
+        <span><a title="发表" href="./post">发布文章</a></span>
+        <span><a title="登出" href="./logout">登出系统</a></span>
+        <% } else { %>
+        <span><a title="登录" href="./login">登录系统</a></span>
+        <span><a title="注册" href="./reg">用户注册</a></span>
+        <% } %>
+        <span>
+            <form action="/search" method="get">
+                <input type="text" name="keyword" placeholder="SEARCH" class="search" />
+            </form>
+        </span>
+    </nav>
+    <article>
+        <% if (success) { %>
+        <div><%= success %></div>
+        <% } %>
+        <% if (error) { %>
+        <div><%= error %></div>
+<% } %>

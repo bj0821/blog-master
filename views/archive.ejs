@@ -1,0 +1,173 @@
+<%- include header %>
+
+<div class="col-xs-4">
+    <br/>
+    <div id="main" style="float:left; width: 400px;height: 450px;"></div>
+    <script type="text/javascript">
+    var myChart = echarts.init(document.getElementById("main"));
+    var option = {
+        title:{
+            text:"第一个图标演示示例"
+        },
+        tooltip:{
+            text:"this is tool tip"
+        },
+        legend:{
+            data:['销量']
+        },
+        xAxis:{
+            data:["寸衫","羊毛衫","裤子","袜子","皮鞋","帽子"]
+        },
+        yAxis:{},
+        series:[{
+                    name:["销量"],
+                    type:"bar",
+                    data:[5,20,36,6,43,67]
+                }]
+    };
+
+    // myChart.setOption(option);
+
+    myChart.setOption({
+        title:{
+            text:"车联网数据展示"
+        },
+        tooltip:{
+            text:"this is tool tip"
+        },
+        legend:{
+            data:['车辆']
+        },
+        xAxis:{
+            data:["10-30","10-31","11-01","11-02","11-03","11-04"]
+        },
+        yAxis:{},
+        series:[{
+                    name:["车辆"],
+                    type:"bar",
+                    data:[25,20,36,16,43,67]
+                }]
+    });
+
+</script>
+</div>
+
+<div class="col-xs-4">
+<h3>饼状图加背景</h3>
+<br/>
+<div id="bzt3" style="float:left; margin-left:100px; width: 400px;height: 370px;"></div>
+<script type="text/javascript">
+    var bzt3 = echarts.init(document.getElementById("bzt3"));
+    bzt3.setOption({
+        title:{
+                text:"区域分配"
+            },
+        backgroundColor:"#EEEFF4",
+        itemStyle:{
+            emphasis:{
+                shadowBlur:200,
+                shadowColor:"rgba(0,0,0,0.8)"
+            }
+        },
+        series:[
+                {
+                    name: '区域分配',
+                    type: 'pie',
+                    radius: '55%',
+                    data:[
+                        {value:235, name:'呈贡区'},
+                        {value:474, name:'盘龙区'},
+                        {value:310, name:'五华区'},
+                        {value:335, name:'西山区'},
+                        {value:200, name:'官渡区'}
+                    ]
+                }
+            ]
+    });
+</script>
+</div>
+<br/>
+
+<div class="col-xs-4">
+    <br/>
+    <div id="main1" style=" width: 600px;height: 400px;"></div>
+    <script type="text/javascript">
+   var myChart = echarts.init(document.getElementById('main1'));
+   var base = + new Date(2017,10,8);
+   var oneDay = 24*3600*1000;
+   var date = [];
+   var data = [Math.random()*150];
+   var now = new Date(base);
+   var day = 30;
+   function addData(shift){
+       now = [now.getFullYear(),now.getMonth()+1,now.getDate()].join('/');        
+       date.push(now);        
+       data.push((Math.random()-0.5)*10+data[data.length-1]);
+       if (shift) {
+           console.log(data);
+           date.shift();
+           data.shift();
+       }
+       now = new Date(+new Date(now)+oneDay);        
+   }
+
+   for (var i = 0; i < day; i++) {
+       addData();
+   }
+   //设置图标配置项
+   myChart.setOption({
+       title:{
+           text:'ECharts 30天内数据实时更新'
+       },
+       xAxis:{
+           type:"category",
+           boundaryGap:false,
+           data:date
+       },
+       yAxis:{
+           boundaryGap:[0,'100%'],
+           type:'value'
+       },
+       series:[{
+           name:'成交',
+           type:'line',
+           smooth:true, //数据光滑过度
+           symbol:'none', //下一个数据点
+           stack:'a',
+           areaStyle:{
+               normal:{
+                   color:'green'
+               }
+           },
+           data:data
+       }]
+   })
+   setInterval(function(){
+       addData(true);
+       myChart.setOption({
+           xAxis:{
+               data:date
+           },
+           series:[{
+               name:'成交',
+               data:data
+           }]
+       });
+   },1000)
+
+</script>
+</div>
+
+<!--
+<ul class="archive">
+    <% var lastYear = 0 %>
+    <% posts.forEach(function (post, index) { %>
+    <% if (lastYear != post.time.year) { %>
+    <li><h3><%= post.time.year %></h3></li>
+    <% lastYear = post.time.year } %>
+    <li><time><%= post.time.day %></time></li>
+    <li><a href="/u/<%= post.name %>/<%= post.time.day %>/<%= post.title %>"><%= post.title %></a></li>
+    <% }) %>
+</ul>
+-->
+<%- include footer %>
